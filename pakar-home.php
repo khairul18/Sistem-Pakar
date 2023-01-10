@@ -1,3 +1,4 @@
+<?php include "koneksi.php";?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -33,34 +34,67 @@
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">Dashboard</h1>
+            <h1 class="h2">Pertanyaan</h1>
           </div>
           <div class="card">
-			  <h5 class="card-header">Tambah Fakta Baru</h5>
-			  <div class="card-body">
-			  	<form action="pakar-home.php" method="post">
-				  <div class="form-group">
-				    <label for="exampleFormControlSelect1">Pilih Jurusan :</label>
-				    <select name="solusi" class="form-control" id="exampleFormControlSelect2">
-				    <?php 
-				    include "koneksi.php";
-				    $sql = "SELECT * from tb_solusi";
-				    $data = mysqli_query($connect,$sql);
-				    while ($row = mysqli_fetch_assoc($data)) {
-				    	 if ($row['isi_solusi']!="x-1" && $row['isi_solusi']!="x-2" && $row['isi_solusi']!="x-3" && $row['isi_solusi']!="x-4" && $row['isi_solusi']!="x-5") {
-				        	echo '<option value='.$row['isi_solusi'].'>'.$row['isi_solusi'].'</option>';
-				    	 }
-				    }
-				    ?>
-				    </select>
-				  </div>
-				  <div class="form-group">
-				    <label for="exampleFormControlInput2">Masukan fakta :</label>
-				    <input type="text" name="fakta" class="form-control" id="exampleFormControlInput1" placeholder="contoh : Suka memperbaiki komputer">
-				  </div>
-				  <input type="submit" class="btn btn-info" name="simpan1">
-				</form>			    
-			  </div>
+			  <h5 class="card-header">
+          <Button class="btn btn-success my-0" > <a href="pakar-home12345.php" class="text-light" >Tambah</a></Button>
+        </h5>
+			<div class="card-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              
+              <th scope="col">Kode</th>
+              <th scope="col">Isi Pertanyaan</th>
+              <th scope="col">Handle</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+
+              $sql="Select * from tb_pertanyaan";
+              $result=mysqli_query($connect,$sql);
+
+              if($result){
+                while($row=mysqli_fetch_assoc($result))
+                  {
+                    $kode=$row['kode_pertanyaan'];
+                    $tanya=$row['isi_pertanyaan'];
+
+                    echo'
+                      <tr>
+                        <th scope="row">'.$kode.'</th>
+                        <td>'.$tanya.'</td>
+                        
+                      </tr>
+                    ';
+                  }
+
+              
+              }
+            
+            ?>
+            <!-- <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>Jacob</td>
+              <td>Thornton</td>
+              <td>@fat</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>Larry</td>
+              <td>the Bird</td>
+              <td>@twitter</td>
+            </tr> -->
+          </tbody>
+        </table>
 			</div>
         </main>
       </div>
@@ -82,18 +116,3 @@
   </body>
 </html>
 
-<?php
-include "koneksi.php";
-if (!empty($_POST['simpan1'])){
-	$fakta= $_POST['fakta'];
-	$solusi=$_POST['solusi'];
-  $oleh="pakar";
-  $status="setuju";
-
-    $sql1 = "INSERT INTO tb_kesimpulan (solusi, fakta, oleh, status) VALUES ('$solusi', '$fakta', '$oleh', '$status')";
-    if (mysqli_query($connect,$sql1)){
-    	echo "<script>alert('Berhasil memasukan fakta baru!'); window.location=('pakar-home.php');</script>";
-	//echo "<script type='text/javascript'>window.location.replace('pakar-mode.php');</script>";
-  }
-}
-?>

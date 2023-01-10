@@ -1,3 +1,9 @@
+<?php
+  $a = "";
+  $b = "";
+
+  
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -13,52 +19,95 @@
     <link rel="stylesheet" href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" crossorigin="anonymous">
 
     <!-- Custom styles for this template -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
 </head>
 <body>
-    <?php include ('navbar.php'); ?>
-    
+   
+
+   
+   <div class="site" id="page">
+            <a class="skip-link sr-only" href="#main">Skip to content</a>
+
+            <!-- Options headline effects: .rotate | .slide | .zoom | .push | .clip -->
+            <section class="hero-section hero-section--image clearfix clip">
+                <div class="hero-section__wrap">
+                    <div class="hero-section__option">
+                        <img src="assets/images/abab.jpg" alt="Hero section image">
+                    </div>
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="offset-lg-1 col-lg-10">
+                                <div class="title-01 title-01--11 text-center">
+
     <main class="batas-atas">
-        <div class="card text-white bg-info mb-3">
-          <h5 class="card-header">Solusi</h5>
+        <div class="card text-white mb-3" style="background-color: #BD8611; opacity: 0.9">
+          <h4 class="card-header">HASIL KATEGORI TRIASE</h4>
           <div class="card-body text-left ukuran-20">
 
             <form method="post" action="solusi.php" enctype="multipart/form-data" role="form">
 
                 <?php
+              
                 include ('koneksi.php');
                 //$kode='m01';
                 session_start();
-                echo "<p>Nama : ".$_SESSION['nama']."</p>";
-                echo "<p>Umur : ".$_SESSION['umur']."</p>";
+                
                     
                     if(isset($_GET['kode'])){
                         $kode=$_GET['kode'];
                     }   
                 ?>
-                <hr>
-                <p>Kamu merasa :</p>
+                
+                <p style="margin-left:30px;">Kondisi Korban :</p>
                 <?php
                  include "fungsi.php";
                  solusi($kode);  
                 ?>
-                
 
                 <hr>
                 <?php
                 $sql = "SELECT * from tb_solusi WHERE kode_solusi='$kode'";
                 $data = mysqli_query($connect,$sql);
                 $row = mysqli_fetch_assoc($data);
+               
 
-                if ($row['kode_solusi']=="x-1" || $row['isi_solusi']=="x-2" || $row['isi_solusi']=="x-3" || $row['isi_solusi']=="x-4" || $row['isi_solusi']=="x-5") {
-                     echo "<center><p><strong style='color:red'>SISTEM TIDAK MENEMUKAN JAWABAN !</strong></p></center><hr>";
-                     ?>
+                if($row['isi_solusi']=="Immediate"){
+                  $a='red';
+                }
+                elseif ($row['isi_solusi']=="Delayed") {
+                  $a='yellow';
+                }
+                elseif ($row['isi_solusi']=="Deceased") {
+                  $a='black';
+                }
+                else{$a='green';}
 
-                     <!------------------------MASUKAN KEPADA SISTEM -------------------------------->
+                
+
+                if($row['isi_solusi']=="Immediate"){
+                  $b='Korban harus segera dievakuasi!';
+                }
+                elseif ($row['isi_solusi']=="Delayed") {
+                  $b='Korban ini dapat menunggu kategori merah';
+                }
+                elseif ($row['isi_solusi']=="Deceased") {
+                  $b='Korban sudah tidak dapat diselamatkan';
+                }
+                else{$b='Korban kategori ini menjadi prioritas terakhir';}
+
+
+                    
+                    
+                if ($row['isi_solusi']=="x-1" || $row['isi_solusi']=="x-2" || $row['isi_solusi']=="x-3" || $row['isi_solusi']=="x-4" || $row['isi_solusi']=="x-5") {
+                    echo "<center><p><strong style='color:red'>SISTEM TIDAK MENEMUKAN JAWABAN !</strong></p></center><hr>";
+                    ?>
+
+                    <!------------------------MASUKAN KEPADA SISTEM -------------------------------->
                         <div class="card bg-dark">
-                             <h5 class="card-header">Pengguna menambah fakta baru</h5>
+                            <h5 class="card-header">Pengguna menambah fakta baru</h5>
                             <div class="card-body">
-                             <form action="solusi.php" method="post">
+                            <form action="solusi.php" method="post">
                               <div class="form-group">
                                 <label for="exampleFormControlSelect1">Pilih Jurusan :</label>
                                 <select name="solusi" class="form-control" id="exampleFormControlSelect2">
@@ -74,34 +123,40 @@
                                 ?>
                                 </select>
                               </div>
-                              <div class="form-group">
-                                <label for="exampleFormControlInput2">Masukan fakta:</label>
-                                <input type="text" name="fakta" class="form-control" id="exampleFormControlInput1" placeholder="contoh : Suka memperbaiki komputer">
-                              </div>
+                              
                               <input type="submit" class="btn btn-info" name="masukan">
                             </form>    
                             </div> 
                         </div>  
                         <!------------------------MASUKAN KEPADA SISTEM -------------------------------->                      
                      <?php 
+                   
+                    //  if ($row=="Immediate") {
+                    //   $a="Red";}
                 }
                 
                 else{
-                    echo "<p>Maka kamu harus mengambil prodi : <strong style='color:green'>".$row['isi_solusi']."</strong></p>";
+                  
+                    echo "<p style='margin-left:30px;'> Kategori Korban adalah : <strong style='color:$a'>".$row['isi_solusi']."</strong></p>";
+                    echo"<p style='margin-left:30px;'>Keterangan: $b</p>";
                 }
                 
                 ?>
             </form>
             <br>
             <div class="text-center">
-                <a style="margin-bottom: 10px;" href="hapus-session.php" class="btn btn-outline-light col-sm-2">Akhiri</a>
+                <a style="margin-bottom: 10px;" href="hapus-session.php" class="btn btn-outline-light col-lm-1">Selesai</a>
             </div>
           </div>
           
         </div>
     
 
-
+              </div>
+              </div>
+              </div>
+            </section>
+        </div>
 
     </main>
 

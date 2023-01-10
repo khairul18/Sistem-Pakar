@@ -2,6 +2,15 @@ body {
   font-size: .875rem;
 }
 
+.btn{
+  
+  color: white;
+}
+
+.btn a{
+  text-decoration: none;
+}
+
 .feather {
   width: 16px;
   height: 16px;
@@ -98,3 +107,4 @@ body {
   border-color: transparent;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
+
